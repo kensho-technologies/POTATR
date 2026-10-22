@@ -1,0 +1,25 @@
+{
+    "lr": 5e-05,
+    "lr_backbone": 5e-05,
+    "batch_size": 2,
+    "weight_decay": 0.0001,
+    "epochs": 97,
+    "lr_drop": 2,
+    "lr_gamma": 0.9,
+    "max_batches_per_epoch": 250000,
+    "clip_max_norm": 0.1,
+    "dropout": 0.04,
+    "device": "cuda",
+    "seed": 42,
+    "start_epoch": 0,
+    "num_workers": 4,
+    "datasets": [
+        {
+            "data_root_dir": "./data/PubTables-v2/Single Pages/",
+            "img_extension": ".jpg",
+            "val_max_size": 250,
+            "train_transform": "train",
+            "val_transform": "eval"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "device": "cuda",
+    "seed": 42,
+    "batch_size": 1,
+    "num_workers": 4,
+    "datasets": [
+        {
+            "data_root_dir": "./data/PubTables-v2/Single Pages/",
+            "name": "pubtables-v2",
+            "img_extension": ".jpg",
+            "val_transform": "eval"
+        }
+    ]
+}

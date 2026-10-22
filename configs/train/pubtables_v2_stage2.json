@@ -1,0 +1,43 @@
+{
+    "lr": 5e-05,
+    "lr_backbone": 5e-05,
+    "batch_size": 2,
+    "weight_decay": 0.0001,
+    "epochs": 35,
+    "lr_drop": 1,
+    "lr_gamma": 0.9,
+    "max_batches_per_epoch": 250000,
+    "clip_max_norm": 0.1,
+    "dropout": 0.04,
+    "device": "cuda",
+    "seed": 42,
+    "start_epoch": 0,
+    "num_workers": 4,
+    "datasets": [
+        {
+            "data_root_dir": "./data/PubTables-v2/Single Pages/",
+            "img_extension": ".jpg",
+            "val_max_size": 250,
+            "train_transform": "train",
+            "val_transform": "eval"
+        },
+        {
+            "data_root_dir": "./data/PubTables-v2/Full Documents/",
+            "img_extension": ".jpg",
+            "train_page_list": "configs/data/pubtables_v2/full_documents_no_objects_train.txt",
+            "train_max_size": 2000,
+            "val_max_size": 0,
+            "train_transform": "train",
+            "val_transform": "eval"
+        },
+        {
+            "data_root_dir": "./data/PubTables-v2/Single Pages/",
+            "img_extension": ".jpg",
+            "train_page_list": "configs/data/pubtables_v2/long_tables_train.txt",
+            "val_page_list": "configs/data/pubtables_v2/long_tables_val.txt",
+            "val_max_size": 250,
+            "train_transform": "train",
+            "val_transform": "eval"
+        }
+    ]
+}

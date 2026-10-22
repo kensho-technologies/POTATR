@@ -1,0 +1,15 @@
+{
+    "adj_class_weights": [
+        1.0,
+        1.0
+    ],
+    "aux_loss": false,
+    "ce_loss_coef": 1,
+    "bbox_loss_coef": 5,
+    "giou_loss_coef": 2,
+    "adj_loss_coef": 0.05,
+    "eos_coef": 0.1,
+    "set_cost_class": 1,
+    "set_cost_bbox": 5,
+    "set_cost_giou": 2
+}
