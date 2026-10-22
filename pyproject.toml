@@ -1,0 +1,157 @@
+[project]
+name = "potatr"
+dynamic = ["version"]
+authors = [
+    { name = "Brandon Smock" },
+]
+maintainers = [
+    { name = "Kensho Technologies", email = "opensource@kensho.com" },
+]
+description = "Page-Object Table Transformer (POTATR) for table structure recognition"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/*"]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.0",
+    "torchvision>=0.15",
+    "numpy>=2.0",
+    "scipy>=1.10",
+    "Pillow>=9.0",
+    "safetensors>=0.3",
+    "pycocotools>=2.0",
+    "grits-metric>=0.1",
+    "apted>=1.0",
+    "rapidfuzz>=3.0",
+    "lxml>=4.9",
+    "packaging>=21.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "coverage>=7.6.10,<8",
+    "mypy>=1.15.0,<2",
+    "pytest>=9,<10",
+    "pytest-cov>=7,<8",
+    "ruff>=0.9.4,<1",
+]
+
+[project.urls]
+source = "https://github.com/kensho-technologies/POTATR"
+
+[project.scripts]
+potatr-train = "potatr.train:cli_main"
+potatr-infer = "potatr.inference:cli_main"
+potatr-init = "potatr.initialize:cli_main"
+
+[build-system]
+requires = ["setuptools>=77.0", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_file = "src/potatr/version.py"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["potatr*"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = [
+    "alembic_schema",
+    "migrations",
+    ".venv",
+    "venv",
+    "*_pb2*",
+    "version.py",
+    "src/potatr/detr",
+    "src/potatr/teds.py",
+]
+output-format = "grouped"
+# Unsafe fixes can change behavior; for example, the T201 fix deletes print() calls.
+unsafe-fixes = false
+
+[tool.ruff.lint]
+select = [
+    "E",  # Flake8 errors
+    "F",  # Pyflakes errors
+    "W",  # Codestyle warnings
+    "I",  # isort
+    "D102",  # docstrings for public methods
+    "D103",  # docstrings for public functions
+    "D107",  # docstrings for __init__
+    "D2",  # docstring formatting (autofixable)
+    "D3",  # docstring formatting quotes
+    "A001",  # redefined builtin
+    "B002",  # nonexistent operator
+    "B006",  # mutable default argument
+    "B014",  # duplicate except handler (autofixable)
+    "B018",  # expression not assigned
+    "C402",  # consider using dict comprehension (autofixable)
+    "BLE",  # Blind except
+    "G",  # logger string formatting
+    "G004",  # no f-strings in log messages
+    "N805",  # no self argument
+    "PLE",  # pylint errors
+    "PLR1722",  # consider using sys exit (autofixable)
+    "PLW",  # pylint warnings
+    "Q",  # flake8-quotes
+    "S102",  # no exec
+    "S307",  # no eval
+    "SLF",  # flake8 private member access (_foo)
+    "T20",  # flake8-print
+    "UP004",  # useless object inheritance
+    "UP032",  # use f-string instead of format
+]
+ignore = [
+    "E501",  # Line too long (handled by black)
+    "E713",  # membership test should be not in
+    "E741",  # ambiguous variable name
+    "F541",  # f-string without any placeholders
+    "D202",  # docstyle no-blank-lines-allowed
+    "D203",  # docstyle one-blank-line-before-class (incompatible with D211)
+    "D213",  # docstyle multi-line-summary-second-line (incompatible with D212)
+    "G010",  # use logging.warning instead of .warn
+    "G201",  # use logging.exception instead of .error(..., exc_info=True)
+    "PLE1205",  # too many arguments to logger
+    "PLW0602",  # global variable not assigned
+    "PLW1508",  # invalid envvar type
+    "PLW2901",  # redefine loop variable
+]
+unfixable = [
+    "T201",  # print(): report it, but never delete it automatically
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/test*/**" = ["D"]  # Ignore pydocstyle checks on tests
+"/**/test*/**" = ["D"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+lines-after-imports = 2
+force-sort-within-sections = true
+
+[tool.mypy]
+ignore_missing_imports = true
+follow_imports = "silent"
+disallow_untyped_calls = false
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+strict_optional = true
+strict_equality = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+exclude = ["tests", "src/potatr/detr", "src/potatr/teds.py"]
