@@ -40,6 +40,19 @@ from potatr.model import SetCriterion
 logger = logging.getLogger(__name__)
 
 
+def load_page_words(img_filepath: str, words_dir: str) -> list[dict[str, Any]]:
+    """Load a page's words from the words_dir folder next to its images folder.
+
+    The words file is <page>.json or <page>_words.json.
+    """
+    words_filepath = img_filepath.replace("images", words_dir).replace(".jpg", ".json")
+    if not os.path.exists(words_filepath):
+        words_filepath = img_filepath.replace("images", words_dir).replace(".jpg", "_words.json")
+    with open(words_filepath) as f:
+        words: list[dict[str, Any]] = json.load(f)
+    return words
+
+
 @torch.no_grad()
 def evaluate(
     args: Any,
@@ -160,16 +173,14 @@ def evaluate(
                     target["grits_top"] = [table["grid_top"] for table in tables_data]
                     target["grits_con"] = [table["grid_con"] for table in tables_data]
 
-            img_words_filepath = img_filepath.replace("images", args.table_words_dir).replace(
-                ".jpg", ".json"
-            )
-            if not os.path.exists(img_words_filepath):
-                img_words_filepath = img_filepath.replace("images", args.table_words_dir).replace(
-                    ".jpg", "_words.json"
-                )
-            with open(img_words_filepath) as f:
-                tokens = json.load(f)
-            target["tokens"] = tokens
+            # The model's cells, captions and footers use the words in table_words_dir (for
+            # example an OCR engine's). The ground truth caption and footer text always comes
+            # from the document's own words, so OCR text is scored against the true text.
+            target["tokens"] = load_page_words(img_filepath, args.table_words_dir)
+            if args.table_words_dir == "words":
+                target["true_tokens"] = target["tokens"]
+            else:
+                target["true_tokens"] = load_page_words(img_filepath, "words")
 
             if past_warmup:
                 total_file_io_time += time.perf_counter() - file_io_start
@@ -305,13 +316,13 @@ def evaluate(
                     if edge[0]["label"] in table_classes and edge[0]["bbox"] == table_bbox:
                         if edge[1]["label"] in caption_classes:
                             text, _ = postprocess.extract_text_inside_bbox(
-                                target["tokens"], edge[1]["bbox"]
+                                target["true_tokens"], edge[1]["bbox"]
                             )
                             if text.strip():
                                 caption_parts.append((edge[1]["bbox"][1], text.strip()))
                         elif edge[1]["label"] in footer_classes:
                             text, _ = postprocess.extract_text_inside_bbox(
-                                target["tokens"], edge[1]["bbox"]
+                                target["true_tokens"], edge[1]["bbox"]
                             )
                             if text.strip():
                                 footer_parts.append((edge[1]["bbox"][1], text.strip()))

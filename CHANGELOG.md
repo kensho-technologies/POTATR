@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+
+### Fixed
+- A bug in evaluation for caption and footer text.
+
 ## 0.1.0
 
 First public release: training, evaluation and inference code for POTATR v1.1 on PubTables-v2.

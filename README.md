@@ -84,7 +84,9 @@ This gives `data/PubTables-v2/Full Documents/train/` with `images/` and `xml_ann
 
 The configs' `data_root_dir` settings point at these folders; change them in the configs in
 `configs/train/` and `configs/eval/` if your copy is elsewhere. Evaluation reads each page's words
-from `words/`; use `--table_words_dir` to read them from another directory in each split.
+from `words/`; use `--table_words_dir` to read them from another directory in each split, for
+example an OCR engine's words. The ground truth caption and footer text always comes from
+`words/`, so text from another source is scored against the document's own text.
 
 ## Pretrained weights
 
